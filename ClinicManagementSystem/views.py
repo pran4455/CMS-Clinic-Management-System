@@ -1769,6 +1769,7 @@ def patient_view_history(request):
 
 
 def patient_view_payments(request):
+    
     class TransactionData:
         def __init__(self, name, t_id, email, amount, chargetype, date_time):
             self.name = name
