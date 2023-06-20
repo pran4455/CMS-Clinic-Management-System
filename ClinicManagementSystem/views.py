@@ -708,7 +708,7 @@ def add_patient_details(request):
         age = request.POST.get("age")
         sex = request.POST.get("sex")
         phone = request.POST.get("phone-number")
-        address = request.POST.get("address")
+        address = request.POST.get("address").replace(",", "-").replace("\r\n", ";")
         # prescription = request.POST.get("prescription").replace(",", "-").replace(",", "-").replace("\r\n", ";")
         dental_carries = (
             request.POST.get("dental-carries").replace(",", "-").replace("\r\n", ";")
