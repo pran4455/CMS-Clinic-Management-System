@@ -1,8 +1,8 @@
 import ctypes
 
 class HashMap:
-    def __init__(self):
-        self.array_size = 10
+    def __init__(self, arr_size=10):
+        self.array_size = arr_size
         self.array = (ctypes.py_object * self.array_size)()
         for idx in range(self.array_size):
             self.array[idx] = None
