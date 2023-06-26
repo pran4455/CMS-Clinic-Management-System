@@ -13,9 +13,17 @@ class List:
         Args:
             size (int): The initial capacity of the list.
         """
-        self.n = 0  # Current number of elements in the list
-        self.cap = size  # Current capacity of the list
-        self.list = self.make_array(size)  # Internal array to store the elements
+        if isinstance(size, int):
+            self.n = 0  # Current number of elements in the list
+            self.cap = size  # Current capacity of the list
+            self.list = self.make_array(size)  # Internal array to store the elements
+        else:
+            self.n = 0
+            self.cap = len(size)
+            self.list = self.make_array(len(size))
+            for elt in size:
+                self.append(elt)
+            
 
     def make_array(self, size):
         """
@@ -78,6 +86,8 @@ class List:
         Raises:
             IndexError: If the index is out of bounds.
         """
+        if isinstance(idx, slice):
+            return List([self[ii] for ii in range(*idx.indices(len(self)))])
         if idx >= self.n:
             raise IndexError("List index out of bound")
         return self.list[idx]
