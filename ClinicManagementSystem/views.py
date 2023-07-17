@@ -1567,7 +1567,16 @@ def book_local_appointment(request):
 
         matched_disease = graph.find_disease(symptom)
 
-        matched_doctor = graph.get_matching_doctors(matched_disease, int(age))[0]
+        matched_doctor = graph.get_matching_doctors(matched_disease, int(age))
+
+        if matched_doctor:
+            matched_doctor = matched_doctor[0]
+        else:
+            return render(
+                request,
+                "receptionist_book_appointment_search_patient.html",
+                {"alertmessage": "Doctor cannot be matched with the given symptoms. Please re-enter correct symptoms."}
+            )
 
         queuename = f"QUEUE_{matched_doctor.upper()}"
 
@@ -1781,15 +1790,19 @@ def patient_view_payments(request):
             self.chargetype = chargetype
             self.date_time = date_time
 
-    transactiondatas = []
+    transactionstack = Stack(5)
 
     with open("transactions.csv") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             if row[2] == request.session.get("CURRENT_USER"):
-                transactiondatas.append(
+                transactionstack.push(
                     TransactionData(row[0], row[1], row[2], row[3], row[4], row[5])
                 )
+    
+    transactiondatas = []
+    for idx in range(len(transactionstack)):
+        transactiondatas.append(transactionstack.pop())
 
     return render(
         request, "patient_payments.html", {"transactiondatas": transactiondatas}
